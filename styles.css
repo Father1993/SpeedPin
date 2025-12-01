@@ -6,17 +6,21 @@
 }
 body {
     margin: 0;
-    width: 280px;
-    padding: 12px;
+    width: 260px;
+    min-height: 200px;
+    max-height: 600px;
+    border-radius: 12px;
+    box-sizing: border-box;
     background: linear-gradient(
         135deg,
         rgba(99, 102, 241, 0.05),
         rgba(139, 92, 246, 0.05)
     );
+    overflow: hidden;
 }
 .card {
     width: 100%;
-    padding: 12px;
+    height: 100%;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.85);
     border: 1px solid rgba(148, 163, 184, 0.3);
@@ -25,17 +29,19 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 12px;
+    box-sizing: border-box;
 }
 form {
     display: grid;
-    gap: 6px;
+    gap: 4px;
 }
 input,
 button {
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid rgba(148, 163, 184, 0.4);
-    padding: 8px 10px;
-    font-size: 13px;
+    padding: 6px 8px;
+    font-size: 12px;
     transition: all 0.2s ease;
     background: rgba(255, 255, 255, 0.8);
 }
@@ -60,16 +66,32 @@ ul {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    max-height: 200px;
+    gap: 4px;
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
-    padding-right: 2px;
+    overflow-x: hidden;
+    padding-right: 4px;
+}
+ul::-webkit-scrollbar {
+    width: 6px;
+}
+ul::-webkit-scrollbar-track {
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: 3px;
+}
+ul::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.4);
+    border-radius: 3px;
+}
+ul::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.6);
 }
 li {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px;
+    padding: 6px;
     border-radius: 8px;
     border: 1px solid rgba(148, 163, 184, 0.3);
     background: rgba(255, 255, 255, 0.7);
