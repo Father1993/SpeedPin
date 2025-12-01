@@ -1,0 +1,11 @@
+{
+    "manifest_version": 3,
+    "name": "Quick Pins",
+    "version": "1.0.0",
+    "description": "Минималистичное всплывающее окно для хранения избранных ссылок с favicon.",
+    "action": {
+        "default_title": "Мои быстрые ссылки",
+        "default_popup": "popup.html"
+    },
+    "permissions": ["storage"]
+}
