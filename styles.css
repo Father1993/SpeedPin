@@ -102,6 +102,10 @@ li:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
 }
+li.editing {
+    border-color: rgba(99, 102, 241, 0.45);
+    background: rgba(99, 102, 241, 0.08);
+}
 li img {
     width: 16px;
     height: 16px;
@@ -118,17 +122,38 @@ li a {
     font-weight: 500;
     font-size: 13px;
 }
-li button {
+li .actions {
+    display: flex;
+    gap: 1px;
+    flex-shrink: 0;
+    opacity: 0.35;
+    transition: opacity 0.15s ease;
+}
+li:hover .actions {
+    opacity: 1;
+}
+li .actions button {
     background: none;
     border: none;
     color: #94a3b8;
-    padding: 4px;
+    padding: 2px 4px;
     border-radius: 4px;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-    font-size: 12px;
+    transition: all 0.15s ease;
+    font-size: 11px;
+    line-height: 1;
+    min-width: 18px;
+    transform: none;
+    box-shadow: none;
 }
-li button:hover {
+li .actions button:disabled {
+    opacity: 0.2;
+    cursor: default;
+}
+li .actions button:not(:disabled):hover {
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.12);
+}
+li .actions button.remove:hover {
     color: #ef4444;
     background: rgba(239, 68, 68, 0.1);
 }
