@@ -1,0 +1,5 @@
+extension.zip
+extension-temp/
+.DS_Store
+Thumbs.db
+*.log
