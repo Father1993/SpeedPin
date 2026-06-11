@@ -157,3 +157,26 @@ li .actions button.remove:hover {
     color: #ef4444;
     background: rgba(239, 68, 68, 0.1);
 }
+.io {
+    display: flex;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+.io button {
+    flex: 1;
+    padding: 4px 6px;
+    font-size: 11px;
+    background: transparent;
+    color: #64748b;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    font-weight: 500;
+}
+.io button:hover {
+    color: #6366f1;
+    border-color: rgba(99, 102, 241, 0.45);
+    background: rgba(99, 102, 241, 0.06);
+    transform: none;
+    box-shadow: none;
+}

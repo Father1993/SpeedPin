@@ -110,4 +110,41 @@ form.addEventListener('submit', async (event) => {
     urlInput.focus()
 })
 
+const normalize = (data) => {
+    const list = Array.isArray(data) ? data : data?.items
+    if (!Array.isArray(list)) return null
+    return list
+        .map((e) => ({
+            url: String(e?.url || '').trim(),
+            label: String(e?.label || '').trim(),
+        }))
+        .filter((e) => e.url)
+}
+
+document.querySelector('#export').addEventListener('click', () => {
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(
+        new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' })
+    )
+    a.download = 'quick-pins.json'
+    a.click()
+    URL.revokeObjectURL(a.href)
+})
+
+const importFile = document.querySelector('#import-file')
+document.querySelector('#import').addEventListener('click', () => importFile.click())
+importFile.addEventListener('change', async () => {
+    const file = importFile.files?.[0]
+    importFile.value = ''
+    if (!file) return
+    try {
+        const list = normalize(JSON.parse(await file.text()))
+        if (!list?.length) return
+        if (items.length && !confirm('Заменить текущие pins?')) return
+        resetForm()
+        items = list
+        await save()
+    } catch {}
+})
+
 init()
