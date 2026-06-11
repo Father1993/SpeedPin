@@ -1,45 +1,55 @@
-# Политика конфиденциальности
+# Privacy Policy
 
-**Quick Pins** — расширение для браузера Chrome
+**SpeedPin** — Chrome browser extension
 
-## Сбор данных
+**Author:** Andrej Spinej  
+**Repository:** [github.com/Father1993/SpeedPin](https://github.com/Father1993/SpeedPin)
 
-Расширение **Quick Pins** использует `chrome.storage.sync` для хранения ссылок, которые вы добавляете вручную. При большом объёме данных или ошибке синхронизации данные могут сохраняться в `chrome.storage.local`.
+## Data collection
 
-### Какие данные хранятся:
-- URL-адреса веб-сайтов, которые вы добавляете
-- Подписи (метки) для ссылок, которые вы указываете
+SpeedPin uses `chrome.storage.sync` to store links you add manually. For large lists or sync errors, data may be stored in `chrome.storage.local` instead.
 
-### Где хранятся данные:
-- Данные хранятся локально в вашем браузере Chrome
-- При включенной синхронизации Chrome данные синхронизируются между вашими устройствами через аккаунт Google
-- Данные хранятся в облачном хранилище Google (если включена синхронизация)
+### What is stored
 
-### Сетевые запросы:
-- Для отображения иконок сайтов расширение запрашивает favicon у Google (`google.com/s2/favicons`) — передаётся только hostname URL, без ваших подписей и других данных
+- Website URLs you add
+- Optional labels (captions) for those links
 
-### Что НЕ собирается:
-- Расширение **НЕ** собирает личную информацию
-- Расширение **НЕ** отправляет ваши сохранённые ссылки на сторонние серверы
-- Расширение **НЕ** отслеживает вашу активность в браузере
-- Расширение **НЕ** собирает аналитику
+### Where data is stored
 
-## Использование данных
+- Locally in your Chrome browser
+- When Chrome Sync is enabled, data syncs across your devices via your Google account
+- Data may be stored in Google cloud storage (if Chrome Sync is enabled)
 
-Данные используются исключительно для:
-- Отображения ваших сохраненных ссылок в popup-окне расширения
-- Синхронизации ссылок между вашими устройствами (если включена синхронизация Chrome)
+### Network requests
 
-## Удаление данных
+- To display site icons, the extension requests favicons from Google (`google.com/s2/favicons`) — only the URL hostname is sent, not your labels or other data
 
-Вы можете удалить все данные в любой момент:
-- Удалите отдельные ссылки через кнопку "✕" в расширении
-- Или удалите расширение через `chrome://extensions/` — все данные будут удалены
+### What is NOT collected
 
-## Изменения в политике
+- SpeedPin does **not** collect personal information
+- SpeedPin does **not** send your saved links to third-party servers
+- SpeedPin does **not** track your browsing activity
+- SpeedPin does **not** collect analytics
 
-Эта политика конфиденциальности может обновляться. Дата последнего обновления: июнь 2025
+## How data is used
 
-## Контакты
+Data is used only to:
 
-Если у вас есть вопросы о политике конфиденциальности, создайте issue в репозитории проекта.
+- Display your saved links in the extension popup
+- Sync links across your devices (when Chrome Sync is enabled)
+
+## Deleting data
+
+You can delete all data at any time:
+
+- Remove individual links with the **✕** button in the extension
+- Uninstall the extension via `chrome://extensions/` — all stored data is removed
+
+## Policy updates
+
+This privacy policy may be updated from time to time.  
+**Last updated:** June 2026
+
+## Contact
+
+For privacy questions, open an issue in the [project repository](https://github.com/Father1993/SpeedPin/issues).

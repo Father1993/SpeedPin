@@ -1,136 +1,137 @@
-# Quick Pins — расширение для Chrome
+# SpeedPin
 
-Минималистичный менеджер ссылок во всплывающем окне. Сохраняет URL с подписью, отображает favicon, хранит данные в `chrome.storage.sync`, поэтому ссылки синхронизируются между браузерами под одним аккаунтом.
+A minimal Chrome extension popup for managing quick links (pins). Save URLs with optional labels, reorder and edit them, import/export as JSON, and sync across devices via Chrome Sync.
 
-## ✨ Возможности
+**Author:** [Andrej Spinej](https://github.com/Father1993)  
+**License:** [MIT](LICENSE)  
+**Repository:** [github.com/Father1993/SpeedPin](https://github.com/Father1993/SpeedPin)
 
-- 🚀 Быстрое добавление ссылок с подписями
-- 🎨 Автоматическое отображение favicon сайтов
-- 🔄 Синхронизация между устройствами через Chrome Sync
-- 📱 Адаптивный интерфейс с прокруткой
-- 🗑️ Простое удаление ссылок одним кликом
-- 🔒 Локальное хранение данных (без отправки на серверы)
+## Features
 
-## 📁 Структура проекта
+- Add links with optional labels
+- Edit and delete pins
+- Reorder pins (move up / down)
+- Import and export pins as JSON (`quick-pins.json`)
+- Automatic favicon display with fallback placeholder
+- Sync across devices via `chrome.storage.sync` (with `local` fallback for large lists)
+- Compact glassmorphism UI with custom scrollbar
+- Manifest V3, single `storage` permission, no build step
+
+## Project structure
 
 ```
-extention_for_chrome/
-├── manifest.json          # Конфигурация расширения (Manifest V3)
-├── popup.html             # Разметка всплывающего окна
-├── popup.js               # Логика добавления/удаления ссылок
-├── styles.css             # Стили интерфейса
-├── icons/                 # Иконки расширения (16, 48, 128px)
-│   ├── icon16.png
-│   ├── icon48.png
-│   └── icon128.png
-├── PRIVACY_POLICY.md      # Политика конфиденциальности
-├── PUBLISH_GUIDE.md       # Руководство по публикации в Chrome Web Store
-├── prepare-zip.bat        # Скрипт для создания ZIP-архива (Windows)
-├── prepare-zip.sh         # Скрипт для создания ZIP-архива (Linux/Mac)
-└── README.md              # Этот файл
+SpeedPin/
+├── manifest.json       # Extension config (Manifest V3)
+├── popup.html          # Popup markup
+├── popup.js            # All extension logic
+├── styles.css          # UI styles
+├── icons/              # Extension icons (16, 48, 128 px) — required for Web Store
+├── PRIVACY_POLICY.md   # Privacy policy (required for Chrome Web Store)
+├── PUBLISH_GUIDE.md    # Step-by-step Chrome Web Store publishing guide
+├── LICENSE             # MIT license
+├── CONTRIBUTING.md     # Contribution guidelines
+├── .gitignore          # Git ignore rules
+├── prepare-zip.bat     # ZIP pack script (Windows)
+├── prepare-zip.sh      # ZIP pack script (Linux/macOS)
+└── README.md
 ```
 
-## 🚀 Установка в Chrome (режим разработчика)
+## Install (developer mode)
 
-1. Скачайте папку проекта целиком (или склонируйте репозиторий).
-2. **Важно:** Создайте иконки в папке `icons/`:
-   - `icon16.png` (16×16 пикселей)
-   - `icon48.png` (48×48 пикселей)
-   - `icon128.png` (128×128 пикселей)
-   
-   Если иконок нет, расширение будет работать, но без иконки в панели инструментов.
+1. Clone the repository:
 
-3. Откройте `chrome://extensions/` в Chrome.
-4. Включите **Режим разработчика** (правый верхний угол).
-5. Нажмите **Загрузить распакованное** → выберите папку проекта.
-6. Иконка расширения появится в панели. Закрепите её через меню Extensions.
+   ```bash
+   git clone https://github.com/Father1993/SpeedPin.git
+   cd SpeedPin
+   ```
 
-## 💡 Использование
+2. *(Optional)* Add icons to `icons/`:
+   - `icon16.png` (16×16)
+   - `icon48.png` (48×48)
+   - `icon128.png` (128×128)
 
-1. Откройте всплывающее окно (иконка «Quick Pins»).
-2. В поле **URL** вставьте адрес сайта (например, `https://example.com`).
-3. В поле **Подпись** (необязательно) добавьте название ссылки.
-4. Нажмите **«Добавить»**. Ссылка появится в списке с favicon сайта.
-5. Клик по ссылке открывает сайт в новой вкладке.
-6. Кнопка **«✕»** удаляет ссылку из списка.
+   The extension works without icons, but Chrome will show a default placeholder in the toolbar.
 
-## 🔧 Как это работает
+3. Open `chrome://extensions/` in Chrome.
+4. Enable **Developer mode** (top right).
+5. Click **Load unpacked** and select the project folder.
+6. Pin the extension from the Extensions menu.
 
-- При инициализации [`popup.js`](popup.js) загружает сохраненные ссылки из `chrome.storage.sync` и отображает их.
-- При добавлении новой ссылки она сохраняется в начало списка (дубликаты автоматически удаляются).
-- Данные хранятся в синхронизированном хранилище Chrome, поэтому доступны на всех устройствах с одним аккаунтом.
-- Для отображения favicon используется публичный сервис Google (`/s2/favicons`) по домену сайта.
+## Usage
 
-## 🎨 Особенности интерфейса
+1. Open the popup (SpeedPin icon in the toolbar).
+2. Enter a **URL** (e.g. `https://example.com`).
+3. Optionally add a **label**.
+4. Click **Добавить** (Add) — the pin appears at the top of the list.
+5. Click a pin name to open the link in a new tab.
+6. Hover a row to reveal actions:
+   - **↑ / ↓** — reorder
+   - **✎** — edit (fills the form; click again to cancel)
+   - **✕** — delete
+7. **Экспорт** — download `quick-pins.json`
+8. **Импорт** — restore pins from a JSON file (replaces current list after confirmation)
 
-- **Адаптивная высота:** Окно автоматически подстраивается под количество ссылок (от 200px до 600px).
-- **Прокрутка:** При большом количестве ссылок появляется кастомный скроллбар.
-- **Современный дизайн:** Градиентный фон, размытие (backdrop-filter), плавные анимации.
-- **Удобная навигация:** Все ссылки видны, длинные URL обрезаются с многоточием.
+## How it works
 
-## 📦 Подготовка к публикации в Chrome Web Store
+- On startup, [`popup.js`](popup.js) loads pins from `chrome.storage.sync` and `chrome.storage.local` in parallel and picks the most complete list.
+- New pins are added to the top; duplicate URLs replace the existing entry.
+- Lists under ~7 KB are stored in `chrome.storage.sync`; larger lists use `chrome.storage.local`.
+- On save, the inactive storage area is cleared to avoid sync/local desync.
+- Favicons are loaded from [Google's favicon service](https://www.google.com/s2/favicons) by hostname, with an inline SVG fallback on error.
 
-### Быстрый старт:
+## Export / import format
 
-1. **Создайте иконки** (если еще не созданы):
-   - Используйте онлайн-сервисы: [favicon.io](https://favicon.io), [realfavicongenerator.net](https://realfavicongenerator.net)
-   - Или графические редакторы: Figma, Photoshop, GIMP
+```json
+[
+  { "url": "https://example.com", "label": "Example" }
+]
+```
 
-2. **Опубликуйте Privacy Policy:**
-   - Загрузите `PRIVACY_POLICY.md` на GitHub Gist, GitHub Pages или другой сервис
-   - Получите публичную ссылку (понадобится при загрузке в магазин)
+Also accepts `{ "items": [...] }`.
 
-3. **Создайте ZIP-архив:**
-   - Windows: запустите `prepare-zip.bat`
-   - Linux/Mac: запустите `prepare-zip.sh`
-   - Или вручную: заархивируйте файлы `manifest.json`, `popup.html`, `popup.js`, `styles.css` и папку `icons/`
+## Packaging for Chrome Web Store
 
-4. **Зарегистрируйтесь как разработчик:**
-   - Перейдите на [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)
-   - Оплатите единоразовый взнос $5
-   - Загрузите архив и заполните форму
+1. Add icons to `icons/` (recommended).
+2. Host [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) publicly (e.g. GitHub raw link) for the store listing.
+3. Create a ZIP:
+   - **Windows:** `prepare-zip.bat`
+   - **Linux/macOS:** `prepare-zip.sh`
+4. Upload `extension.zip` to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
 
-**Подробная инструкция:** См. [`PUBLISH_GUIDE.md`](PUBLISH_GUIDE.md)
+**Detailed guide:** [`PUBLISH_GUIDE.md`](PUBLISH_GUIDE.md)  
+See also: [Chrome Web Store publish guide](https://developer.chrome.com/docs/webstore/publish/).
 
-## 🔒 Конфиденциальность
+## Privacy
 
-Расширение использует только `chrome.storage.sync` для хранения ваших ссылок. Данные:
-- Хранятся локально в браузере
-- Синхронизируются через Chrome Sync (если включено)
-- **НЕ** отправляются на внешние серверы
-- **НЕ** собирают аналитику или личную информацию
+SpeedPin stores your links locally in Chrome. With Chrome Sync enabled, data syncs across your signed-in devices. Your saved links are not sent to third-party servers. Favicon requests go to Google CDN (hostname only).
 
-Подробнее: [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md)
+Full details: [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md)
 
-## 🛠️ Кастомизация
+## Customization
 
-- **Цвета и стили:** Измените палитру в [`styles.css`](styles.css)
-- **Размеры:** Настройте ширину окна, отступы, размеры шрифтов
-- **Функционал:** Можно добавить:
-  - Drag-and-drop для изменения порядка ссылок
-  - Авто-подстановку текущей вкладки (требует `tabs` и `activeTab` permissions)
-  - Группировку ссылок по категориям
-  - Экспорт/импорт ссылок
+- **Styles:** edit [`styles.css`](styles.css)
+- **Logic:** edit [`popup.js`](popup.js) — keep it simple (KISS)
 
-## 📝 Технические детали
+## Technical details
 
-- **Manifest Version:** 3 (соответствует требованиям Chrome Web Store)
-- **Permissions:** `storage` (для сохранения ссылок)
-- **Storage:** `chrome.storage.sync` (синхронизация между устройствами)
-- **Favicon API:** Google Favicon Service (`/s2/favicons`)
+| Item | Value |
+|------|-------|
+| Manifest | V3 |
+| Permissions | `storage` |
+| Storage | `chrome.storage.sync` (+ `local` fallback) |
+| UI language | Russian (popup labels) |
 
-## 🔗 Полезные ссылки
+## Links
 
-- [Документация Manifest V3](https://developer.chrome.com/docs/extensions/)
+- [Chrome Extensions documentation](https://developer.chrome.com/docs/extensions/)
 - [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)
-- [Руководство по публикации расширений](https://developer.chrome.com/docs/webstore/publish/)
-- [Обзорное руководство (статья с Habr)](https://habr.com/ru/articles/703330/)
+- [Pull Request #1 — initial features](https://github.com/Father1993/SpeedPin/pull/1)
 
-## 📄 Лицензия
+## Contributing
 
-См. файл `LICENSE` (если есть)
+See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and pull requests are welcome.
 
 ---
 
-**Версия:** 1.0.0  
-**Последнее обновление:** 2024
+**Version:** 1.0.1  
+**Last updated:** June 2026

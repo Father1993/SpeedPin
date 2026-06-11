@@ -1,10 +1,11 @@
 {
     "manifest_version": 3,
-    "name": "Quick Pins",
+    "name": "SpeedPin",
     "version": "1.0.1",
-    "description": "Минималистичное всплывающее окно для хранения избранных ссылок с favicon.",
+    "description": "Minimal popup for quick links with favicons, reorder, edit, and JSON import/export.",
+    "homepage_url": "https://github.com/Father1993/SpeedPin",
     "action": {
-        "default_title": "Мои быстрые ссылки",
+        "default_title": "SpeedPin",
         "default_popup": "popup.html"
     },
     "permissions": ["storage"],
