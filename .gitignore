@@ -1,7 +1,6 @@
 dist/
 extension.zip
 extension-temp/
-extension/
 .DS_Store
 Thumbs.db
 *.log

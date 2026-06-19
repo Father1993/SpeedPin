@@ -100,12 +100,14 @@ const template = (data, i) => {
         btn('✎', 'Изменить', () => {
             if (editIndex === i) {
                 resetForm()
+                render()
                 return
             }
             editIndex = i
             urlInput.value = data.url
             labelInput.value = data.label || ''
             submitBtn.textContent = 'Сохранить'
+            render()
             urlInput.focus()
         }),
         btn('✕', 'Удалить', async () => {
