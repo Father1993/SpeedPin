@@ -17,53 +17,37 @@ A minimal Chrome extension popup for managing quick links (pins). Save URLs with
 - Compact glassmorphism UI with custom scrollbar
 - Manifest V3, single `storage` permission, no build step
 
-## Project structure
+## Quick start
 
-```
-SpeedPin/
-├── manifest.json       # Extension config (Manifest V3)
-├── popup.html          # Popup markup
-├── popup.js            # All extension logic
-├── styles.css          # UI styles
-├── icons/              # Extension icons (16, 48, 128 px) — required for Web Store
-├── PRIVACY_POLICY.md   # Privacy policy (required for Chrome Web Store)
-├── PUBLISH_GUIDE.md    # Step-by-step Chrome Web Store publishing guide
-├── LICENSE             # MIT license
-├── CONTRIBUTING.md     # Contribution guidelines
-├── .gitignore          # Git ignore rules
-├── prepare-zip.bat     # ZIP pack script (Windows)
-├── prepare-zip.sh      # ZIP pack script (Linux/macOS)
-└── README.md
+### Install from GitHub Release (recommended)
+
+1. Open [Releases](https://github.com/Father1993/SpeedPin/releases)
+2. Download `SpeedPin-vX.Y.Z.zip` from the latest release
+3. Unzip to a folder
+4. Open `chrome://extensions/` → enable **Developer mode**
+5. Click **Load unpacked** → select the unzipped folder
+
+### Install from source (developers)
+
+```bash
+git clone https://github.com/Father1993/SpeedPin.git
+cd SpeedPin
 ```
 
-## Install (developer mode)
+1. Open `chrome://extensions/` in Chrome
+2. Enable **Developer mode**
+3. Click **Load unpacked** and select the project folder
+4. Pin the extension from the Extensions menu
 
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/Father1993/SpeedPin.git
-   cd SpeedPin
-   ```
-
-2. *(Optional)* Add icons to `icons/`:
-   - `icon16.png` (16×16)
-   - `icon48.png` (48×48)
-   - `icon128.png` (128×128)
-
-   The extension works without icons, but Chrome will show a default placeholder in the toolbar.
-
-3. Open `chrome://extensions/` in Chrome.
-4. Enable **Developer mode** (top right).
-5. Click **Load unpacked** and select the project folder.
-6. Pin the extension from the Extensions menu.
+> Load the **repository root** (where `manifest.json` lives), not a subfolder.
 
 ## Usage
 
-1. Open the popup (SpeedPin icon in the toolbar).
-2. Enter a **URL** (e.g. `https://example.com`).
-3. Optionally add a **label**.
-4. Click **Добавить** (Add) — the pin appears at the top of the list.
-5. Click a pin name to open the link in a new tab.
+1. Open the popup (SpeedPin icon in the toolbar)
+2. Enter a **URL** (e.g. `https://example.com`)
+3. Optionally add a **label**
+4. Click **Добавить** (Add) — the pin appears at the top of the list
+5. Click a pin name to open the link in a new tab
 6. Hover a row to reveal actions:
    - **↑ / ↓** — reorder
    - **✎** — edit (fills the form; click again to cancel)
@@ -73,11 +57,11 @@ SpeedPin/
 
 ## How it works
 
-- On startup, [`popup.js`](popup.js) loads pins from `chrome.storage.sync` and `chrome.storage.local` in parallel and picks the most complete list.
-- New pins are added to the top; duplicate URLs replace the existing entry.
-- Lists under ~7 KB are stored in `chrome.storage.sync`; larger lists use `chrome.storage.local`.
-- On save, the inactive storage area is cleared to avoid sync/local desync.
-- Favicons are loaded from [Google's favicon service](https://www.google.com/s2/favicons) by hostname, with an inline SVG fallback on error.
+- On startup, [`popup.js`](popup.js) loads pins from `chrome.storage.sync` and `chrome.storage.local` in parallel and picks the most complete list
+- New pins are added to the top; duplicate URLs replace the existing entry
+- Lists under ~7 KB are stored in `chrome.storage.sync`; larger lists use `chrome.storage.local`
+- On save, the inactive storage area is cleared to avoid sync/local desync
+- Favicons are loaded from [Google's favicon service](https://www.google.com/s2/favicons) by hostname, with an inline SVG fallback on error
 
 ## Export / import format
 
@@ -89,17 +73,90 @@ SpeedPin/
 
 Also accepts `{ "items": [...] }`.
 
-## Packaging for Chrome Web Store
+## Build & release
 
-1. Add icons to `icons/` (recommended).
-2. Host [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) publicly (e.g. GitHub raw link) for the store listing.
-3. Create a ZIP:
-   - **Windows:** `prepare-zip.bat`
-   - **Linux/macOS:** `prepare-zip.sh`
-4. Upload `extension.zip` to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
+SpeedPin has **no npm/webpack build**. Packaging copies extension files into a ZIP.
 
-**Detailed guide:** [`PUBLISH_GUIDE.md`](PUBLISH_GUIDE.md)  
-See also: [Chrome Web Store publish guide](https://developer.chrome.com/docs/webstore/publish/).
+### Build the extension ZIP
+
+**Linux / macOS / Git Bash:**
+
+```bash
+./build.sh
+```
+
+**Windows (CMD / PowerShell):**
+
+```bat
+prepare-zip.bat
+```
+
+**Output:**
+
+| File | Use |
+|------|-----|
+| `dist/SpeedPin-v1.0.1.zip` | GitHub Releases |
+| `extension.zip` | Chrome Web Store (same content) |
+
+**Regenerate icons:**
+
+```bash
+python scripts/generate-icons.py
+./build.sh
+```
+
+**Verify ZIP structure** (files must be at ZIP root):
+
+```bash
+unzip -l dist/SpeedPin-v1.0.1.zip
+```
+
+### Publish a GitHub Release
+
+Full beginner-friendly guide: **[`RELEASE.md`](RELEASE.md)**
+
+Summary:
+
+1. Bump `version` in `manifest.json`
+2. Update `CHANGELOG.md`
+3. Test locally → run `./build.sh`
+4. Create git tag: `git tag -a v1.0.1 -m "SpeedPin v1.0.1"`
+5. Push tag: `git push origin v1.0.1`
+6. Create release on GitHub and attach `dist/SpeedPin-v1.0.1.zip`
+
+See [`CHANGELOG.md`](CHANGELOG.md) for version history.
+
+## Project structure
+
+```
+SpeedPin/
+├── manifest.json              # Extension config (Manifest V3)
+├── popup.html                 # Popup markup
+├── popup.js                   # Extension logic
+├── styles.css                 # UI styles
+├── icons/                     # Extension icons (16, 48, 128 px)
+├── scripts/
+│   ├── build-extension.sh     # Packaging script (canonical)
+│   └── generate-icons.py      # Icon generator (stdlib only)
+├── build.sh                   # Shortcut → scripts/build-extension.sh
+├── prepare-zip.bat            # Windows packaging
+├── prepare-zip.sh             # Alias for build.sh
+├── dist/                      # Build output (gitignored)
+├── CHANGELOG.md               # Version history
+├── RELEASE.md                 # GitHub release guide
+├── PRIVACY_POLICY.md          # Privacy policy (Chrome Web Store)
+├── PUBLISH_GUIDE.md           # Chrome Web Store guide
+├── CONTRIBUTING.md            # Contribution guidelines
+└── README.md
+```
+
+## Chrome Web Store
+
+To publish on the Chrome Web Store:
+
+1. Build the ZIP: `./build.sh`
+2. Follow [`PUBLISH_GUIDE.md`](PUBLISH_GUIDE.md)
+3. Upload `extension.zip` to the [Developer Dashboard](https://chrome.google.com/webstore/devconsole)
 
 ## Privacy
 
@@ -123,9 +180,9 @@ Full details: [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md)
 
 ## Links
 
+- [GitHub Releases](https://github.com/Father1993/SpeedPin/releases)
 - [Chrome Extensions documentation](https://developer.chrome.com/docs/extensions/)
 - [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)
-- [Pull Request #1 — initial features](https://github.com/Father1993/SpeedPin/pull/1)
 
 ## Contributing
 

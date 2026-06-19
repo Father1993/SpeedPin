@@ -17,14 +17,39 @@ git clone https://github.com/Father1993/SpeedPin.git
 cd SpeedPin
 ```
 
-Load the project folder as an unpacked extension in Chrome. No build step required.
+Load the **project root** as an unpacked extension in Chrome. No npm or bundler required.
+
+After code changes, click **Reload** on the extension card in `chrome://extensions/`.
+
+## Build the extension package
+
+```bash
+# Linux / macOS / Git Bash
+./build.sh
+
+# Windows (CMD / PowerShell)
+prepare-zip.bat
+```
+
+Output: `dist/SpeedPin-vX.Y.Z.zip` and `extension.zip`.
+
+Regenerate icons if needed:
+
+```bash
+python scripts/generate-icons.py
+```
+
+## Release workflow (maintainers)
+
+See [`RELEASE.md`](RELEASE.md) for the full GitHub release checklist.
 
 ## Guidelines
 
 - Preserve existing behavior unless the issue explicitly requires a change
 - Prefer vanilla JS — no frameworks or bundlers
 - Match the existing code style in `popup.js`
-- Update `README.md` and `PRIVACY_POLICY.md` if behavior or data handling changes
+- Update `README.md`, `CHANGELOG.md`, and `PRIVACY_POLICY.md` if behavior or data handling changes
+- Bump `version` in `manifest.json` before tagging a release
 
 ## Questions
 

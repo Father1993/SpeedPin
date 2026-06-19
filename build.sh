@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# Backward-compatible alias for scripts/build-extension.sh
+set -euo pipefail
 cd "$(dirname "$0")"
 bash scripts/build-extension.sh "$@"
