@@ -3,6 +3,7 @@ const labelInput = document.querySelector('#label')
 const listEl = document.querySelector('#links')
 const form = document.querySelector('#link-form')
 const submitBtn = form.querySelector('button')
+const importFile = document.querySelector('#import-file')
 
 const FALLBACK_ICON =
     'data:image/svg+xml,' +
@@ -41,8 +42,9 @@ const resetForm = () => {
 const save = async () => {
     const payload = { items }
     const useLocal = JSON.stringify(payload).length > 7000
-    const primary = useLocal ? chrome.storage.local : chrome.storage.sync
-    const secondary = useLocal ? chrome.storage.sync : chrome.storage.local
+    const [primary, secondary] = useLocal
+        ? [chrome.storage.local, chrome.storage.sync]
+        : [chrome.storage.sync, chrome.storage.local]
     try {
         await primary.set(payload)
         await secondary.remove('items')
@@ -61,11 +63,14 @@ const move = (i, d) => {
     else if (editIndex === j) editIndex = i
 }
 
-const btn = (text, title, onClick, disabled, className = '') => {
+const reorder = async (i, d) => {
+    move(i, d)
+    await save()
+}
+
+const btn = (text, title, onClick, disabled = false, className = '') => {
     const el = document.createElement('button')
-    el.type = 'button'
-    el.textContent = text
-    el.title = title
+    Object.assign(el, { type: 'button', textContent: text, title })
     if (className) el.className = className
     if (disabled) el.disabled = true
     else el.addEventListener('click', onClick)
@@ -81,32 +86,28 @@ const template = (data, i) => {
         icon.onerror = null
         icon.src = FALLBACK_ICON
     }
-    const anchor = document.createElement('a')
-    anchor.href = data.url
-    anchor.textContent = data.label || data.url
-    anchor.target = '_blank'
-    anchor.rel = 'noopener noreferrer'
-
+    const anchor = Object.assign(document.createElement('a'), {
+        href: data.url,
+        textContent: data.label || data.url,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+    })
     const actions = document.createElement('div')
     actions.className = 'actions'
     actions.append(
-        btn('↑', 'Выше', async () => {
-            move(i, -1)
-            await save()
-        }, i === 0),
-        btn('↓', 'Ниже', async () => {
-            move(i, 1)
-            await save()
-        }, i === items.length - 1),
+        btn('↑', 'Выше', () => reorder(i, -1), i === 0),
+        btn('↓', 'Ниже', () => reorder(i, 1), i === items.length - 1),
         btn('✎', 'Изменить', () => {
             if (editIndex === i) {
                 resetForm()
+                render()
                 return
             }
             editIndex = i
             urlInput.value = data.url
             labelInput.value = data.label || ''
             submitBtn.textContent = 'Сохранить'
+            render()
             urlInput.focus()
         }),
         btn('✕', 'Удалить', async () => {
@@ -116,15 +117,13 @@ const template = (data, i) => {
             await save()
         }, false, 'remove')
     )
-
     item.append(icon, anchor, actions)
     if (editIndex === i) item.classList.add('editing')
     return item
 }
 
 const render = () => {
-    listEl.innerHTML = ''
-    items.forEach((data, i) => listEl.append(template(data, i)))
+    listEl.replaceChildren(...items.map(template))
 }
 
 const init = async () => {
@@ -132,14 +131,10 @@ const init = async () => {
         chrome.storage.sync.get('items'),
         chrome.storage.local.get('items'),
     ])
-    const a = normalize(sync)
-    const b = normalize(local)
     items =
-        a?.length && b?.length
-            ? a.length >= b.length
-                ? a
-                : b
-            : (a || b) ?? []
+        [normalize(sync), normalize(local)]
+            .filter((list) => list?.length)
+            .sort((a, b) => b.length - a.length)[0] ?? []
     render()
 }
 
@@ -160,16 +155,16 @@ form.addEventListener('submit', async (event) => {
 })
 
 document.querySelector('#export').addEventListener('click', () => {
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(
-        new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' })
-    )
-    a.download = 'quick-pins.json'
+    const a = Object.assign(document.createElement('a'), {
+        href: URL.createObjectURL(
+            new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' })
+        ),
+        download: 'quick-pins.json',
+    })
     a.click()
     URL.revokeObjectURL(a.href)
 })
 
-const importFile = document.querySelector('#import-file')
 document.querySelector('#import').addEventListener('click', () => importFile.click())
 importFile.addEventListener('change', async () => {
     const file = importFile.files?.[0]

@@ -11,29 +11,21 @@
 SpeedPin already uses Manifest V3.
 
 #### Extension icons
-Create three PNG icons:
+SpeedPin ships with icons in `icons/` and references them in `manifest.json`.
+
+To regenerate:
+
+```bash
+python scripts/generate-icons.py
+```
+
+Required sizes:
 
 - `icons/icon16.png` — 16×16 px
 - `icons/icon48.png` — 48×48 px
 - `icons/icon128.png` — 128×128 px
 
-Add to `manifest.json`:
-
-```json
-"icons": {
-  "16": "icons/icon16.png",
-  "48": "icons/icon48.png",
-  "128": "icons/icon128.png"
-},
-"action": {
-  "default_icon": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png"
-  }
-}
-```
-
-Tools: [favicon.io](https://favicon.io), [realfavicongenerator.net](https://realfavicongenerator.net), Figma, GIMP.
+Tools for custom icons: [favicon.io](https://favicon.io), [realfavicongenerator.net](https://realfavicongenerator.net), Figma, GIMP.
 
 #### Privacy Policy
 Required for extensions with the `storage` permission.
@@ -70,13 +62,13 @@ Prepare:
 **Do not include:**
 
 - `.git/`
-- `README.md`, `LICENSE`, `CONTRIBUTING.md`, `PUBLISH_GUIDE.md` (not needed inside the extension package)
-- Development artifacts
+- `README.md`, `LICENSE`, `CHANGELOG.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PUBLISH_GUIDE.md`
+- `dist/`, `scripts/`, build scripts, development artifacts
 
 **Include:**
 
 ```
-extension.zip
+SpeedPin-v1.0.1.zip
 ├── manifest.json
 ├── popup.html
 ├── popup.js
@@ -87,10 +79,30 @@ extension.zip
     └── icon128.png
 ```
 
-Create the archive:
+Create the archive from the project root:
 
-- **Windows:** `prepare-zip.bat`
-- **Linux/macOS:** `prepare-zip.sh`
+```bash
+./build.sh
+```
+
+Or on Windows:
+
+```bat
+prepare-zip.bat
+```
+
+Output:
+
+- `dist/SpeedPin-v1.0.1.zip` — for GitHub Releases
+- `extension.zip` — upload this to Chrome Web Store
+
+Verify structure:
+
+```bash
+unzip -l dist/SpeedPin-v1.0.1.zip
+```
+
+For GitHub Releases, see [`RELEASE.md`](RELEASE.md).
 
 ## Publishing steps
 
@@ -185,11 +197,11 @@ Open source: https://github.com/Father1993/SpeedPin
 
 ## Pre-publish checklist
 
-- [ ] Icons created (16, 48, 128 px) and added to `manifest.json`
+- [ ] Icons present in `icons/` (run `python scripts/generate-icons.py` if missing)
 - [ ] Privacy Policy URL is public and working
 - [ ] Screenshots ready (min 1, recommended 3–5)
 - [ ] Store descriptions written
-- [ ] ZIP created without dev files
+- [ ] ZIP built with `./build.sh` or `prepare-zip.bat` (no dev files inside)
 - [ ] `version` in `manifest.json` is correct (currently 1.0.1)
 - [ ] Extension tested locally (add, edit, reorder, import, export)
 - [ ] Developer account registered ($5 paid)

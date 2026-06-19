@@ -4,10 +4,18 @@
     "version": "1.0.1",
     "description": "Minimal popup for quick links with favicons, reorder, edit, and JSON import/export.",
     "homepage_url": "https://github.com/Father1993/SpeedPin",
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
     "action": {
         "default_title": "SpeedPin",
-        "default_popup": "popup.html"
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png"
+        }
     },
-    "permissions": ["storage"],
-    "host_permissions": []
+    "permissions": ["storage"]
 }
