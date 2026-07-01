@@ -21,6 +21,16 @@ Load the **project root** as an unpacked extension in Chrome. No npm or bundler 
 
 After code changes, click **Reload** on the extension card in `chrome://extensions/`.
 
+## Smoke test checklist
+
+- Open the popup twice and confirm it appears immediately
+- Add a pin with URL and optional label
+- Reorder pins with ↑ / ↓
+- Edit a pin and cancel edit by clicking ✎ again
+- Delete a pin
+- Export pins to JSON
+- Import pins from JSON and confirm replacement
+
 ## Build the extension package
 
 ```bash

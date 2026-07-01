@@ -25,18 +25,18 @@ Optional but recommended:
 
 ## Step 1 — Prepare the release branch
 
-SpeedPin development happens on `dev`. For a stable release, merge into `main`:
+SpeedPin development happens on `dev`. For a stable release, merge into `master`:
 
 ```bash
-git checkout main
-git pull origin main
+git checkout master
+git pull origin master
 git merge dev
 ```
 
-> **Beginner note:** If `main` does not exist yet, create it from `dev`:
+> **Beginner note:** If `master` does not exist yet, create it from `dev`:
 > ```bash
-> git checkout -b main
-> git push -u origin main
+> git checkout -b master
+> git push -u origin master
 > ```
 
 Resolve any merge conflicts, then test locally (Step 3) before tagging.
@@ -48,16 +48,16 @@ Resolve any merge conflicts, then test locally (Step 3) before tagging.
 The version lives in `manifest.json`:
 
 ```json
-"version": "1.0.1"
+"version": "1.0.2"
 ```
 
 Rules (Semantic Versioning):
 
 | Change type | Example | When to use |
 |-------------|---------|-------------|
-| **PATCH** | 1.0.1 → 1.0.2 | Bug fixes only |
-| **MINOR** | 1.0.1 → 1.1.0 | New features, backward compatible |
-| **MAJOR** | 1.0.1 → 2.0.0 | Breaking changes |
+| **PATCH** | 1.0.2 → 1.0.3 | Bug fixes only |
+| **MINOR** | 1.0.2 → 1.1.0 | New features, backward compatible |
+| **MAJOR** | 1.0.2 → 2.0.0 | Breaking changes |
 
 After changing the version:
 
@@ -68,8 +68,8 @@ Commit:
 
 ```bash
 git add manifest.json CHANGELOG.md README.md
-git commit -m "chore(release): bump version to 1.0.1"
-git push origin main
+git commit -m "chore(release): bump version to 1.0.2"
+git push origin master
 ```
 
 ---
@@ -120,7 +120,7 @@ python scripts/generate-icons.py
 
 | File | Purpose |
 |------|---------|
-| `dist/SpeedPin-v1.0.1.zip` | Upload to **GitHub Releases** |
+| `dist/SpeedPin-v1.0.2.zip` | Upload to **GitHub Releases** |
 | `extension.zip` | Same content — alias for **Chrome Web Store** |
 
 ### Verify ZIP structure (important)
@@ -128,7 +128,7 @@ python scripts/generate-icons.py
 Extension files must be at the **root** of the ZIP, not inside a subfolder.
 
 ```bash
-unzip -l dist/SpeedPin-v1.0.1.zip
+unzip -l dist/SpeedPin-v1.0.2.zip
 ```
 
 Expected contents:
@@ -137,6 +137,7 @@ Expected contents:
 manifest.json
 popup.html
 popup.js
+background.js
 styles.css
 icons/icon16.png
 icons/icon48.png
@@ -149,7 +150,7 @@ icons/icon128.png
 
 ## Step 5 — Test the ZIP
 
-1. Unzip `dist/SpeedPin-v1.0.1.zip` to a temporary folder
+1. Unzip `dist/SpeedPin-v1.0.2.zip` to a temporary folder
 2. In `chrome://extensions/`, click **Load unpacked**
 3. Select the **unzipped folder**
 4. Run the same tests as Step 3
@@ -163,19 +164,19 @@ This confirms the packaged build matches your source.
 Tags mark a specific commit as a release. Use the same version as `manifest.json`:
 
 ```bash
-git tag -a v1.0.1 -m "SpeedPin v1.0.1"
-git push origin v1.0.1
+git tag -a v1.0.2 -m "SpeedPin v1.0.2"
+git push origin v1.0.2
 ```
 
-> **Beginner note:** Tag name must start with `v` (e.g. `v1.0.1`) — this matches GitHub release conventions and the link in `CHANGELOG.md`.
+> **Beginner note:** Tag name must start with `v` (e.g. `v1.0.2`) — this matches GitHub release conventions and the link in `CHANGELOG.md`.
 
 To fix a tag mistake (only if not published yet):
 
 ```bash
-git tag -d v1.0.1
-git push origin :refs/tags/v1.0.1
-git tag -a v1.0.1 -m "SpeedPin v1.0.1"
-git push origin v1.0.1
+git tag -d v1.0.2
+git push origin :refs/tags/v1.0.2
+git tag -a v1.0.2 -m "SpeedPin v1.0.2"
+git push origin v1.0.2
 ```
 
 ---
@@ -186,19 +187,19 @@ git push origin v1.0.1
 
 1. Open [github.com/Father1993/SpeedPin/releases](https://github.com/Father1993/SpeedPin/releases)
 2. Click **Draft a new release**
-3. Click **Choose a tag** → select `v1.0.1` (or type it and choose **Create new tag on publish**)
-4. **Release title:** `SpeedPin v1.0.1`
+3. Click **Choose a tag** → select `v1.0.2` (or type it and choose **Create new tag on publish**)
+4. **Release title:** `SpeedPin v1.0.2`
 5. Paste the release description (see [Release text templates](#release-text-templates) below)
-6. Attach `dist/SpeedPin-v1.0.1.zip` under **Assets**
+6. Attach `dist/SpeedPin-v1.0.2.zip` under **Assets**
 7. Check **Set as the latest release** (for stable releases)
 8. Click **Publish release**
 
 ### Option B — GitHub CLI
 
 ```bash
-gh release create v1.0.1 dist/SpeedPin-v1.0.1.zip \
-  --title "SpeedPin v1.0.1" \
-  --notes-file RELEASE_NOTES_v1.0.1.md
+gh release create v1.0.2 dist/SpeedPin-v1.0.2.zip \
+  --title "SpeedPin v1.0.2" \
+  --notes-file RELEASE_NOTES_v1.0.2.md
 ```
 
 ---
@@ -207,10 +208,10 @@ gh release create v1.0.1 dist/SpeedPin-v1.0.1.zip \
 
 - [ ] Confirm the ZIP downloads and installs via **Load unpacked**
 - [ ] Check that `CHANGELOG.md` links to the new release tag
-- [ ] Merge `main` back into `dev` if you use both branches:
+- [ ] Merge `master` back into `dev` if you use both branches:
   ```bash
   git checkout dev
-  git merge main
+  git merge master
   git push origin dev
   ```
 - [ ] (Optional) Publish to Chrome Web Store — see [`PUBLISH_GUIDE.md`](PUBLISH_GUIDE.md)
@@ -222,13 +223,13 @@ gh release create v1.0.1 dist/SpeedPin-v1.0.1.zip \
 ### Title
 
 ```
-SpeedPin v1.0.1
+SpeedPin v1.0.2
 ```
 
 ### Description (copy for GitHub Release)
 
 ```markdown
-## SpeedPin v1.0.1
+## SpeedPin v1.0.2
 
 Minimal Chrome extension popup for quick links — favicons, reorder, edit, and JSON backup.
 
@@ -242,7 +243,7 @@ Minimal Chrome extension popup for quick links — favicons, reorder, edit, and 
 
 ### Install from this release
 
-1. Download **`SpeedPin-v1.0.1.zip`** below
+1. Download **`SpeedPin-v1.0.2.zip`** below
 2. Unzip to a folder
 3. Open `chrome://extensions/` → enable **Developer mode**
 4. Click **Load unpacked** → select the unzipped folder
@@ -252,14 +253,14 @@ Minimal Chrome extension popup for quick links — favicons, reorder, edit, and 
 ```bash
 git clone https://github.com/Father1993/SpeedPin.git
 cd SpeedPin
-git checkout v1.0.1
+git checkout v1.0.2
 ```
 
 Then load the project folder as unpacked in Chrome.
 
 ### Full changelog
 
-See [CHANGELOG.md](https://github.com/Father1993/SpeedPin/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/Father1993/SpeedPin/blob/master/CHANGELOG.md).
 ```
 
 ---

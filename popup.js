@@ -80,12 +80,16 @@ const btn = (text, title, onClick, disabled = false, className = '') => {
 const template = (data, i) => {
     const item = document.createElement('li')
     const icon = document.createElement('img')
-    icon.src = safeFavicon(data.url)
+    icon.src = FALLBACK_ICON
+    icon.loading = 'lazy'
     icon.alt = ''
     icon.onerror = () => {
         icon.onerror = null
         icon.src = FALLBACK_ICON
     }
+    requestAnimationFrame(() => {
+        icon.src = safeFavicon(data.url)
+    })
     const anchor = Object.assign(document.createElement('a'), {
         href: data.url,
         textContent: data.label || data.url,
@@ -126,15 +130,26 @@ const render = () => {
     listEl.replaceChildren(...items.map(template))
 }
 
-const init = async () => {
+const loadFromStorage = async () => {
     const [{ items: sync }, { items: local }] = await Promise.all([
         chrome.storage.sync.get('items'),
         chrome.storage.local.get('items'),
     ])
-    items =
+    return (
         [normalize(sync), normalize(local)]
             .filter((list) => list?.length)
             .sort((a, b) => b.length - a.length)[0] ?? []
+    )
+}
+
+const init = async () => {
+    render()
+    try {
+        const { items: data } = await chrome.runtime.sendMessage({ type: 'getItems' })
+        items = normalize(data) ?? []
+    } catch {
+        items = await loadFromStorage()
+    }
     render()
 }
 
