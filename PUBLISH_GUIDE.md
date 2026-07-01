@@ -68,10 +68,11 @@ Prepare:
 **Include:**
 
 ```
-SpeedPin-v1.0.1.zip
+SpeedPin-v1.0.2.zip
 ├── manifest.json
 ├── popup.html
 ├── popup.js
+├── background.js
 ├── styles.css
 └── icons/
     ├── icon16.png
@@ -93,13 +94,13 @@ prepare-zip.bat
 
 Output:
 
-- `dist/SpeedPin-v1.0.1.zip` — for GitHub Releases
+- `dist/SpeedPin-v1.0.2.zip` — for GitHub Releases
 - `extension.zip` — upload this to Chrome Web Store
 
 Verify structure:
 
 ```bash
-unzip -l dist/SpeedPin-v1.0.1.zip
+unzip -l dist/SpeedPin-v1.0.2.zip
 ```
 
 For GitHub Releases, see [`RELEASE.md`](RELEASE.md).
@@ -202,6 +203,6 @@ Open source: https://github.com/Father1993/SpeedPin
 - [ ] Screenshots ready (min 1, recommended 3–5)
 - [ ] Store descriptions written
 - [ ] ZIP built with `./build.sh` or `prepare-zip.bat` (no dev files inside)
-- [ ] `version` in `manifest.json` is correct (currently 1.0.1)
+- [ ] `version` in `manifest.json` is correct (currently 1.0.2)
 - [ ] Extension tested locally (add, edit, reorder, import, export)
 - [ ] Developer account registered ($5 paid)

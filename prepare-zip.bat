@@ -4,7 +4,7 @@ setlocal EnableExtensions
 echo Building SpeedPin extension package...
 echo.
 
-for %%f in (manifest.json popup.html popup.js styles.css) do (
+for %%f in (manifest.json popup.html popup.js background.js styles.css) do (
     if not exist "%%f" (
         echo ERROR: Missing required file: %%f
         exit /b 1
@@ -22,6 +22,7 @@ mkdir "dist\staging"
 copy /y "manifest.json" "dist\staging\" >nul
 copy /y "popup.html" "dist\staging\" >nul
 copy /y "popup.js" "dist\staging\" >nul
+copy /y "background.js" "dist\staging\" >nul
 copy /y "styles.css" "dist\staging\" >nul
 
 if exist "icons" (

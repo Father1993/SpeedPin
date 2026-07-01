@@ -13,6 +13,7 @@ A minimal Chrome extension popup for managing quick links (pins). Save URLs with
 - Reorder pins (move up / down)
 - Import and export pins as JSON (`quick-pins.json`)
 - Automatic favicon display with fallback placeholder
+- Instant popup startup via a Manifest V3 service worker cache
 - Sync across devices via `chrome.storage.sync` (with `local` fallback for large lists)
 - Compact glassmorphism UI with custom scrollbar
 - Manifest V3, single `storage` permission, no build step
@@ -57,11 +58,12 @@ cd SpeedPin
 
 ## How it works
 
-- On startup, [`popup.js`](popup.js) loads pins from `chrome.storage.sync` and `chrome.storage.local` in parallel and picks the most complete list
+- [`background.js`](background.js) preloads pins from `chrome.storage.sync` and `chrome.storage.local` into a service worker cache
+- On startup, [`popup.js`](popup.js) renders immediately, asks the service worker for cached pins, and falls back to direct storage reads if needed
 - New pins are added to the top; duplicate URLs replace the existing entry
 - Lists under ~7 KB are stored in `chrome.storage.sync`; larger lists use `chrome.storage.local`
 - On save, the inactive storage area is cleared to avoid sync/local desync
-- Favicons are loaded from [Google's favicon service](https://www.google.com/s2/favicons) by hostname, with an inline SVG fallback on error
+- Favicons are loaded lazily from [Google's favicon service](https://www.google.com/s2/favicons) by hostname, with an inline SVG fallback before load or on error
 
 ## Export / import format
 
@@ -95,7 +97,7 @@ prepare-zip.bat
 
 | File | Use |
 |------|-----|
-| `dist/SpeedPin-v1.0.1.zip` | GitHub Releases |
+| `dist/SpeedPin-v1.0.2.zip` | GitHub Releases |
 | `extension.zip` | Chrome Web Store (same content) |
 
 **Regenerate icons:**
@@ -108,7 +110,7 @@ python scripts/generate-icons.py
 **Verify ZIP structure** (files must be at ZIP root):
 
 ```bash
-unzip -l dist/SpeedPin-v1.0.1.zip
+unzip -l dist/SpeedPin-v1.0.2.zip
 ```
 
 ### Publish a GitHub Release
@@ -120,9 +122,9 @@ Summary:
 1. Bump `version` in `manifest.json`
 2. Update `CHANGELOG.md`
 3. Test locally → run `./build.sh`
-4. Create git tag: `git tag -a v1.0.1 -m "SpeedPin v1.0.1"`
-5. Push tag: `git push origin v1.0.1`
-6. Create release on GitHub and attach `dist/SpeedPin-v1.0.1.zip`
+4. Create git tag: `git tag -a v1.0.2 -m "SpeedPin v1.0.2"`
+5. Push tag: `git push origin v1.0.2`
+6. Create release on GitHub and attach `dist/SpeedPin-v1.0.2.zip`
 
 See [`CHANGELOG.md`](CHANGELOG.md) for version history.
 
@@ -133,6 +135,7 @@ SpeedPin/
 ├── manifest.json              # Extension config (Manifest V3)
 ├── popup.html                 # Popup markup
 ├── popup.js                   # Extension logic
+├── background.js              # Service worker cache for instant popup startup
 ├── styles.css                 # UI styles
 ├── icons/                     # Extension icons (16, 48, 128 px)
 ├── scripts/
@@ -176,6 +179,7 @@ Full details: [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md)
 | Manifest | V3 |
 | Permissions | `storage` |
 | Storage | `chrome.storage.sync` (+ `local` fallback) |
+| Background | MV3 service worker cache |
 | UI language | Russian (popup labels) |
 
 ## Links
@@ -190,5 +194,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and pull requests are welcome.
 
 ---
 
-**Version:** 1.0.1  
-**Last updated:** June 2026
+**Version:** 1.0.2  
+**Last updated:** July 2026

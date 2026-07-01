@@ -8,7 +8,7 @@ VERSION="$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' man
 OUT_DIR="dist"
 STAGING="$OUT_DIR/staging"
 ZIP_NAME="SpeedPin-v${VERSION}.zip"
-FILES=(manifest.json popup.html popup.js styles.css)
+FILES=(manifest.json popup.html popup.js background.js styles.css)
 
 echo "Building SpeedPin v${VERSION}..."
 echo ""
